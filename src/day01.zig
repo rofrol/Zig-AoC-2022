@@ -6,49 +6,38 @@ const StrMap = std.StringHashMap;
 const BitSet = std.DynamicBitSet;
 
 const util = @import("util.zig");
+const util2 = @import("util2.zig");
 const gpa = util.gpa;
 
-const util2 = @import("util2.zig");
+pub fn main() !void {}
 
-// const data = @embedFile("data/day01.txt");
+fn solve(input: []const u8) ![2]u32 {
+    var maximum: [4]u32 = .{ 0, 0, 0, 0 };
 
-pub fn main() !void {
-    print("Hello\n", .{});
-}
-
-fn solve(data: []const u8) ![3]u32 {
-    var maximal: [3]u32 = .{ 0, 0, 0 };
-    var temp: u32 = 0;
-
-    var lines = std.ArrayList([]const u8).init(gpa);
-    defer lines.deinit();
-    var readIter = std.mem.split(u8, data, "\n");
+    var readIter = std.mem.split(u8, input, "\n");
     while (readIter.next()) |line| {
         if (line.len != 0) {
-            temp += try std.fmt.parseInt(u32, line, 10);
+            maximum[3] += try std.fmt.parseInt(u32, line, 10);
         } else {
-            if (temp > maximal[0]) {
-                maximal[0] = temp;
-                temp = 0;
-            }
+            std.sort.sort(u32, &maximum, {}, comptime std.sort.desc(u32));
+            maximum[3] = 0;
         }
-
-        try lines.append(line);
-        // print("{s}\n", .{line});
+        // print("\n{any}", .{maximum});
     }
-    // print("{d}\n", .{maximal[0]});
-    return maximal;
+
+    std.sort.sort(u32, &maximum, {}, comptime std.sort.desc(u32));
+    // print("\nresult: {any}", .{maximum});
+    return .{ maximum[0], maximum[0] + maximum[1] + maximum[2] };
 }
 
 test "test-input" {
     const maximum = try solve(@embedFile("data/day01test.txt"));
-    // const total = @reduce(.Add, @as(@Vector(3, u32), maximum));
-    try std.testing.expectEqual(maximum[0], 24000);
-    // try std.testing.expectEqual(total, 45000);
+    try util2.expectEq(24000, maximum[0]);
+    try util2.expectEq(45000, maximum[1]);
 
-    var result = try util2.benchmark(std.testing.allocator, solve, .{@embedFile("data/day01.txt")}, .{});
-    defer result.deinit();
-    result.printSummary();
+    const maximum2 = try solve(@embedFile("data/day01.txt"));
+    try std.testing.expectEqual(maximum2[0], 71780);
+    try std.testing.expectEqual(maximum2[1], 212489);
 }
 
 // Useful stdlib functions
