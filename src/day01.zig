@@ -8,10 +8,47 @@ const BitSet = std.DynamicBitSet;
 const util = @import("util.zig");
 const gpa = util.gpa;
 
-const data = @embedFile("data/day01.txt");
+const util2 = @import("util2.zig");
+
+// const data = @embedFile("data/day01.txt");
 
 pub fn main() !void {
-    
+    print("Hello\n", .{});
+}
+
+fn solve(data: []const u8) ![3]u32 {
+    var maximal: [3]u32 = .{ 0, 0, 0 };
+    var temp: u32 = 0;
+
+    var lines = std.ArrayList([]const u8).init(gpa);
+    defer lines.deinit();
+    var readIter = std.mem.split(u8, data, "\n");
+    while (readIter.next()) |line| {
+        if (line.len != 0) {
+            temp += try std.fmt.parseInt(u32, line, 10);
+        } else {
+            if (temp > maximal[0]) {
+                maximal[0] = temp;
+                temp = 0;
+            }
+        }
+
+        try lines.append(line);
+        // print("{s}\n", .{line});
+    }
+    // print("{d}\n", .{maximal[0]});
+    return maximal;
+}
+
+test "test-input" {
+    const maximum = try solve(@embedFile("data/day01test.txt"));
+    // const total = @reduce(.Add, @as(@Vector(3, u32), maximum));
+    try std.testing.expectEqual(maximum[0], 24000);
+    // try std.testing.expectEqual(total, 45000);
+
+    var result = try util2.benchmark(std.testing.allocator, solve, .{@embedFile("data/day01.txt")}, .{});
+    defer result.deinit();
+    result.printSummary();
 }
 
 // Useful stdlib functions
