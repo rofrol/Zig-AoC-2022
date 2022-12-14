@@ -33,8 +33,8 @@ test "test-input" {
     try util2.expectEq(45000, maximum[1]);
 
     const maximum2 = try solve(@embedFile("data/day01.txt"));
-    try std.testing.expectEqual(maximum2[0], 71780);
-    try std.testing.expectEqual(maximum2[1], 212489);
+    try util2.expectEq(71780, maximum2[0]);
+    try util2.expectEq(212489, maximum2[1]);
 
     var result = try util2.benchmark(std.testing.allocator, solve, .{@embedFile("data/day01.txt")}, .{});
     defer result.deinit();
