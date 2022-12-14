@@ -28,7 +28,7 @@ fn solve(input: []const u8) ![2]u32 {
 }
 
 test "test-input" {
-    const maximum = try solve(@embedFile("data/day01test.txt"));
+    const maximum = try solve(@embedFile("data/day01ex.txt"));
     try util2.expectEq(24000, maximum[0]);
     try util2.expectEq(45000, maximum[1]);
 
