@@ -51,4 +51,8 @@ test "test-input" {
 
     const sum4 = try solve2(@embedFile("data/day02.txt"));
     try util2.expectEq(10349, sum4);
+
+    var result2 = try util2.benchmark(std.testing.allocator, solve2, .{@embedFile("data/day02.txt")}, .{});
+    defer result2.deinit();
+    result2.printSummary();
 }
