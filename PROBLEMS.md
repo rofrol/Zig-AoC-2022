@@ -1,3 +1,5 @@
+## 2022-11-14T03:58:00
+
 I was getting this error:
 
 ```
@@ -19,3 +21,17 @@ error: the following build command failed with exit code 1:
 ```
 
 After switching to version without my changes, running `zig build test` and apply my changes again, `zig build test` worked.
+
+## 2022-11-14T19:02:00
+
+switch on type tuple or struct impossible.
+
+> Zig only supports switch statements on things you can check equality of. `if(p == Point{.x = 11, .y = 12, .z = 13}) {}` isn't a thing you can do. You have to use `std.meta.eql(p, Point{.x = 11, .y = 12, .z = 13})` https://www.reddit.com/r/Zig/comments/it8fga/comment/g5j1abb/
+
+> Llvm generates offset tables for switch statements and these depend on the switched type being an integer. This is also why you can't switch on a string. https://www.reddit.com/r/Zig/comments/it8fga/comment/g5d83ww/
+
+> I often find myself rewriting the pattern matches as multiple sequential ifs https://www.reddit.com/r/Zig/comments/it8fga/comment/g5futls/
+
+## There is no &&, use and
+
+https://ziglang.org/documentation/master/#Operators

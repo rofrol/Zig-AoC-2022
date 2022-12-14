@@ -11,7 +11,15 @@ const gpa = util.gpa;
 const data = @embedFile("data/day02.txt");
 
 pub fn main() !void {
-    
+    var sum: u32 = 0;
+    var readIter = std.mem.split(u8, data, "\n");
+    while (readIter.next()) |line| {
+        var readIter2 = std.mem.split(u8, line, " ");
+        var c1 = readIter2.next();
+        var c2 = readIter2.next();
+        sum += if( c1 == "A" && c2 == "X") {1} else { 0}        };
+        std.debug.print("{}", .{sum});
+    }
 }
 
 // Useful stdlib functions
